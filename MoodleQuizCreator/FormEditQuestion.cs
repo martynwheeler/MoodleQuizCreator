@@ -150,6 +150,7 @@ namespace MoodleQuizCreator
         private void UpdateQuestion()
         {
             //update datarow
+            QuestionRow["Question Type"] = "multichoice";
             QuestionRow["Question Topic"] = comboBoxTopic.Text;
             QuestionRow["Question Category"] = comboBoxCategory.Text;
             QuestionRow["Question Name"] = textBoxQuestionName.Text;

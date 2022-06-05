@@ -1,5 +1,6 @@
 ﻿using CsvHelper;
 using MoodleQuizCreator.Properties;
+using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
 using System.Globalization;
@@ -21,19 +22,28 @@ namespace MoodleQuizCreator
         public FormMain()
         {
             InitializeComponent();
+            var items = new BindingList<KeyValuePair<string, string>>();
+            items.Add(new KeyValuePair<string, string>("Multiple Choice", "multichoice"));
+            items.Add(new KeyValuePair<string, string>("Numerical", "numerical"));
+            comboBoxType.DataSource = items;
+            comboBoxType.DisplayMember = "Key";
+            comboBoxType.ValueMember = "Value";
         }
 
         // Form
         private void Main_Load(object sender, EventArgs e)
         {
             //Build datatable to hold questions - may wish to load this from a file?
+            Datatable.Columns.Add("Question Type");
             Datatable.Columns.Add("Question Topic");
             Datatable.Columns.Add("Question Category");
             Datatable.Columns.Add("Question Name");
             Datatable.Columns.Add("Question Image");
             Datatable.Columns["Question Image"]!.DataType = System.Type.GetType("System.Byte[]");
             Datatable.Columns.Add("Question Answer");
-            
+            Datatable.Columns.Add("Question Tolerance");
+            Datatable.Columns.Add("Question Unit");
+
             //Attach to datagrid
             dataGridViewQuestions.DataSource = Datatable;
             dataGridViewQuestions.Columns["Question Image"].Visible = false;
@@ -70,6 +80,11 @@ namespace MoodleQuizCreator
             }
 
             comboBoxAnswers.Text = "Select";
+            comboBoxType.Text = "Multiple Choice";
+            textBoxTolerance.Visible = false;
+            labelTolerance.Visible = false;
+            textBoxUnit.Visible = false;
+            labelUnit.Visible = false;
             pictureBox1.SizeMode = PictureBoxSizeMode.Zoom;
 
             // Load treeview from xml file
@@ -836,18 +851,22 @@ namespace MoodleQuizCreator
                     if (comboBoxAnswers.Text != "Select")
                     {
                         DataRow myDataRow = Datatable.NewRow();
+                        myDataRow["Question Type"] = comboBoxType.SelectedValue;
                         myDataRow["Question Topic"] = tn.Parent.Text;
                         myDataRow["Question Category"] = tn.Text;
                         myDataRow["Question Name"] = txtQuestionName.Text;
                         myDataRow["Question Image"] = ClassUtils.ImageToByte(pictureBox1.Image);
                         myDataRow["Question Answer"] = comboBoxAnswers.Text;
+                        myDataRow["Question Tolerance"] = textBoxTolerance.Text;
+                        myDataRow["Question Unit"] = textBoxUnit.Text;
                         Datatable.Rows.Add(myDataRow);
 
                         numCounter.Value++;
                         savedWindowState = WindowState;
                         Hide();
                         notifyIcon1.Visible = true;
-                        comboBoxAnswers.Text = "Select";
+                        if (comboBoxType.Text.Equals("Multiple Choice"))
+                            comboBoxAnswers.Text = "Select";
                         if (currentFileName != null)
                         {
                             SaveQuestionsToXML(currentFileName);
@@ -926,6 +945,7 @@ namespace MoodleQuizCreator
                         case "multichoice":
                             //Create a new datarow
                             DataRow myDataRow = this.Datatable.NewRow();
+                            myDataRow["Question Type"] = "multichoice";
                             myDataRow["Question Topic"] = questionTopic;
                             myDataRow["Question Category"] = questionCategory;
                             myDataRow["Question Name"] = question.name.First().text;
@@ -940,6 +960,9 @@ namespace MoodleQuizCreator
                                 }
                             }
                             this.Datatable.Rows.Add(myDataRow);
+                            break;
+
+                        case "numerical":
                             break;
 
                         default:
@@ -968,9 +991,8 @@ namespace MoodleQuizCreator
                 //Object representation of xml
                 quiz quiz = new();
 
-                string[] answers = { "A", "B", "C", "D" };
-
                 List<quizQuestion> questions = new();
+
                 foreach (DataRow row in this.Datatable.Rows)
                 {
                     quizQuestion question;
@@ -985,59 +1007,106 @@ namespace MoodleQuizCreator
                     };
                     questions.Add(question);
 
-                    //create a new question with a multichoice type
-                    question = new()
+                    switch ((string)row["Question Type"])
                     {
-                        type = "multichoice",
-                        name = new() { new quizQuestionName() { text = (string)row["Question Name"] } },
-                        questiontext = new()
-                        {
-                            new quizQuestionQuestiontext()
+                        case "multichoice":
+                            //create a new question with a multichoice type
+                            string[] answers = { "A", "B", "C", "D" };
+                            question = new()
                             {
-                                format = "html",
-                                text = "<p><img src=\"data:image/png;base64," +
-                                    Convert.ToBase64String((byte[])row["Question Image"]) +
-                                    "\" alt=\"" +
-                                    (string)row["Question Name"] +
-                                    "\" class=\"img-responsive\" /></p>",
-                            }
-                        },
-                        generalfeedback = new() { new quizQuestionGeneralfeedback() { text = "" } },
-                        defaultgrade = "1.0000000",
-                        penalty = ".0000000",
-                        hidden = "0",
-                        idnumber = "",
-                        single = "true",
-                        shuffleanswers = "false",
-                        answernumbering = "none",
-                        showstandardinstruction = "1",
-                        correctfeedback = new() { new quizQuestionCorrectfeedback() { format = "html", text = "" } },
-                        partiallycorrectfeedback = new() { new quizQuestionPartiallycorrectfeedback() { format = "html", text = "" } },
-                        incorrectfeedback = new() { new quizQuestionIncorrectfeedback() { format = "html", text = "" } },
-                    };
+                                type = "multichoice",
+                                name = new() { new quizQuestionName() { text = (string)row["Question Name"] } },
+                                questiontext = new()
+                                {
+                                    new quizQuestionQuestiontext()
+                                    {
+                                        format = "html",
+                                        text = "<p><img src=\"data:image/png;base64," +
+                                            Convert.ToBase64String((byte[])row["Question Image"]) +
+                                            "\" alt=\"" +
+                                            (string)row["Question Name"] +
+                                            "\" class=\"img-responsive\" /></p>",
+                                    }
+                                },
+                                generalfeedback = new() { new quizQuestionGeneralfeedback() { text = "" } },
+                                defaultgrade = "1.0000000",
+                                penalty = ".0000000",
+                                hidden = "0",
+                                idnumber = "",
+                                single = "true",
+                                shuffleanswers = "false",
+                                answernumbering = "none",
+                                showstandardinstruction = "1",
+                                correctfeedback = new() { new quizQuestionCorrectfeedback() { format = "html", text = "" } },
+                                partiallycorrectfeedback = new() { new quizQuestionPartiallycorrectfeedback() { format = "html", text = "" } },
+                                incorrectfeedback = new() { new quizQuestionIncorrectfeedback() { format = "html", text = "" } },
+                            };
 
-                    //Add answers
-                    List<quizQuestionAnswer> questionAnswers = new();
-                    foreach (string answer in answers)
-                    {
-                        quizQuestionAnswer questionAnswer = new()
-                        {
-                            format = "html",
-                            text = answer,
-                            feedback = new() { new quizQuestionAnswerFeedback() { format = "html", text = "" } },
-                        };
-                        if (answer == (string)row["Question Answer"]) //correct answer found
-                        {
-                            questionAnswer.fraction = "100";
-                        }
-                        else
-                        {
-                            questionAnswer.fraction = "0";
-                        }
-                        questionAnswers.Add(questionAnswer);
+                            //Add answers
+                            List<quizQuestionAnswer> questionAnswers;
+                            questionAnswers = new();
+                            foreach (string answer in answers)
+                            {
+                                quizQuestionAnswer questionAnswer = new()
+                                {
+                                    format = "html",
+                                    text = answer,
+                                    feedback = new() { new quizQuestionAnswerFeedback() { format = "html", text = "" } },
+                                };
+                                if (answer == (string)row["Question Answer"]) //correct answer found
+                                {
+                                    questionAnswer.fraction = "100";
+                                }
+                                else
+                                {
+                                    questionAnswer.fraction = "0";
+                                }
+                                questionAnswers.Add(questionAnswer);
+                            }
+                            question.answer = questionAnswers;
+                            questions.Add(question);
+                            break;
+
+                        case "numerical":
+                            question = new()
+                            {
+                                type = "numerical",
+                                name = new() { new quizQuestionName() { text = (string)row["Question Name"] } },
+                                questiontext = new()
+                                {
+                                    new quizQuestionQuestiontext()
+                                    {
+                                        format = "html",
+                                        text = "<p><img src=\"data:image/png;base64," +
+                                            Convert.ToBase64String((byte[])row["Question Image"]) +
+                                            "\" alt=\"" +
+                                            (string)row["Question Name"] +
+                                            "\" class=\"img-responsive\" /></p>",
+                                    }
+                                },
+                                generalfeedback = new() { new quizQuestionGeneralfeedback() { text = "" } },
+                                defaultgrade = "1.0000000",
+                                penalty = ".0000000",
+                                hidden = "0",
+                                idnumber = "",
+                                answer = new()
+                                {
+                                    new quizQuestionAnswer()
+                                    {
+                                        fraction = "100",
+                                        format = "html",
+                                        text = (string)row["Question Answer"],
+                                        feedback = new() { new quizQuestionAnswerFeedback() { format = "html", text = "" } },
+                                    }
+                                },
+                            };
+                            questions.Add(question);
+                            break;
+
+                        default:
+                            break;
                     }
-                    question.answer = questionAnswers;
-                    questions.Add(question);
+
                 }
 
                 //Add all questions to quiz
@@ -1369,6 +1438,31 @@ namespace MoodleQuizCreator
                 {
                     MessageBox.Show(ex.Message, "Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
+            }
+        }
+
+        private void ComboBoxType_SelectedValueChanged(object sender, EventArgs e)
+        {
+            switch (comboBoxType.Text)
+            {
+                case "Multiple Choice":
+                    comboBoxAnswers.DropDownStyle = ComboBoxStyle.DropDownList;
+                    comboBoxAnswers.Text = "Select";
+                    textBoxTolerance.Visible = false;
+                    labelTolerance.Visible = false;
+                    textBoxUnit.Visible = false;
+                    labelUnit.Visible = false;
+                    break;
+                case "Numerical":
+                    comboBoxAnswers.DropDownStyle = ComboBoxStyle.Simple;
+                    comboBoxAnswers.Text = "";
+                    textBoxTolerance.Visible = true;
+                    labelTolerance.Visible = true;
+                    textBoxUnit.Visible = true;
+                    labelUnit.Visible = true;
+                    break;
+                default:
+                    break;
             }
         }
     }

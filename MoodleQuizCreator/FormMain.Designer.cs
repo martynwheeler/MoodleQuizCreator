@@ -65,6 +65,12 @@
             this.tabPageControlPanel = new System.Windows.Forms.TabPage();
             this.splitContainerMain = new System.Windows.Forms.SplitContainer();
             this.panelControl = new System.Windows.Forms.Panel();
+            this.labelUnit = new System.Windows.Forms.Label();
+            this.labelTolerance = new System.Windows.Forms.Label();
+            this.textBoxUnit = new System.Windows.Forms.TextBox();
+            this.textBoxTolerance = new System.Windows.Forms.TextBox();
+            this.comboBoxType = new System.Windows.Forms.ComboBox();
+            this.label5 = new System.Windows.Forms.Label();
             this.comboBoxAnswers = new System.Windows.Forms.ComboBox();
             this.label4 = new System.Windows.Forms.Label();
             this.btnDiscard = new System.Windows.Forms.Button();
@@ -398,6 +404,12 @@
             // 
             // panelControl
             // 
+            this.panelControl.Controls.Add(this.labelUnit);
+            this.panelControl.Controls.Add(this.labelTolerance);
+            this.panelControl.Controls.Add(this.textBoxUnit);
+            this.panelControl.Controls.Add(this.textBoxTolerance);
+            this.panelControl.Controls.Add(this.comboBoxType);
+            this.panelControl.Controls.Add(this.label5);
             this.panelControl.Controls.Add(this.comboBoxAnswers);
             this.panelControl.Controls.Add(this.label4);
             this.panelControl.Controls.Add(this.btnDiscard);
@@ -418,6 +430,63 @@
             this.panelControl.Size = new System.Drawing.Size(600, 612);
             this.panelControl.TabIndex = 17;
             // 
+            // labelUnit
+            // 
+            this.labelUnit.AutoSize = true;
+            this.labelUnit.Location = new System.Drawing.Point(387, 523);
+            this.labelUnit.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.labelUnit.Name = "labelUnit";
+            this.labelUnit.Size = new System.Drawing.Size(29, 15);
+            this.labelUnit.TabIndex = 25;
+            this.labelUnit.Text = "Unit";
+            // 
+            // labelTolerance
+            // 
+            this.labelTolerance.AutoSize = true;
+            this.labelTolerance.Location = new System.Drawing.Point(254, 523);
+            this.labelTolerance.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.labelTolerance.Name = "labelTolerance";
+            this.labelTolerance.Size = new System.Drawing.Size(57, 15);
+            this.labelTolerance.TabIndex = 24;
+            this.labelTolerance.Text = "Tolerance";
+            // 
+            // textBoxUnit
+            // 
+            this.textBoxUnit.Location = new System.Drawing.Point(387, 544);
+            this.textBoxUnit.Name = "textBoxUnit";
+            this.textBoxUnit.Size = new System.Drawing.Size(113, 23);
+            this.textBoxUnit.TabIndex = 23;
+            // 
+            // textBoxTolerance
+            // 
+            this.textBoxTolerance.Location = new System.Drawing.Point(254, 544);
+            this.textBoxTolerance.Name = "textBoxTolerance";
+            this.textBoxTolerance.Size = new System.Drawing.Size(113, 23);
+            this.textBoxTolerance.TabIndex = 22;
+            // 
+            // comboBoxType
+            // 
+            this.comboBoxType.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest;
+            this.comboBoxType.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
+            this.comboBoxType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxType.FormattingEnabled = true;
+            this.comboBoxType.Location = new System.Drawing.Point(126, 508);
+            this.comboBoxType.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.comboBoxType.Name = "comboBoxType";
+            this.comboBoxType.Size = new System.Drawing.Size(112, 23);
+            this.comboBoxType.TabIndex = 21;
+            this.comboBoxType.SelectedValueChanged += new System.EventHandler(this.ComboBoxType_SelectedValueChanged);
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(33, 511);
+            this.label5.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(82, 15);
+            this.label5.TabIndex = 20;
+            this.label5.Text = "Question Type";
+            // 
             // comboBoxAnswers
             // 
             this.comboBoxAnswers.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest;
@@ -430,7 +499,7 @@
             "B",
             "C",
             "D"});
-            this.comboBoxAnswers.Location = new System.Drawing.Point(125, 508);
+            this.comboBoxAnswers.Location = new System.Drawing.Point(125, 544);
             this.comboBoxAnswers.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.comboBoxAnswers.Name = "comboBoxAnswers";
             this.comboBoxAnswers.Size = new System.Drawing.Size(112, 23);
@@ -439,7 +508,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(18, 511);
+            this.label4.Location = new System.Drawing.Point(18, 547);
             this.label4.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(97, 15);
@@ -448,7 +517,7 @@
             // 
             // btnDiscard
             // 
-            this.btnDiscard.Location = new System.Drawing.Point(254, 543);
+            this.btnDiscard.Location = new System.Drawing.Point(254, 579);
             this.btnDiscard.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.btnDiscard.Name = "btnDiscard";
             this.btnDiscard.Size = new System.Drawing.Size(113, 27);
@@ -468,7 +537,7 @@
             // 
             // btnSaveImg
             // 
-            this.btnSaveImg.Location = new System.Drawing.Point(125, 543);
+            this.btnSaveImg.Location = new System.Drawing.Point(125, 579);
             this.btnSaveImg.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.btnSaveImg.Name = "btnSaveImg";
             this.btnSaveImg.Size = new System.Drawing.Size(113, 27);
@@ -741,6 +810,12 @@
         private WK.Libraries.SharpClipboardNS.SharpClipboard sharpClipboard1;
         private ToolStripMenuItem saveTreeViewToolStripMenuItem;
         private ToolStripMenuItem editSelectedToolStripMenuItem;
+        private ComboBox comboBoxType;
+        private Label label5;
+        private TextBox textBoxUnit;
+        private TextBox textBoxTolerance;
+        private Label labelUnit;
+        private Label labelTolerance;
     }
 }
 
