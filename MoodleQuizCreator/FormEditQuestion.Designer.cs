@@ -32,9 +32,7 @@
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnOK = new System.Windows.Forms.Button();
             this.pictureBoxImage = new System.Windows.Forms.PictureBox();
-            this.textBoxImageBase64 = new System.Windows.Forms.TextBox();
             this.buttonPaste = new System.Windows.Forms.Button();
-            this.buttonShowImageString = new System.Windows.Forms.Button();
             this.buttonNext = new System.Windows.Forms.Button();
             this.textBoxQuestionName = new System.Windows.Forms.TextBox();
             this.buttonBack = new System.Windows.Forms.Button();
@@ -44,11 +42,11 @@
             this.label5 = new System.Windows.Forms.Label();
             this.buttonUpdateQuestion = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.buttonDeleteQuestion = new System.Windows.Forms.Button();
             this.comboBoxAnswer = new System.Windows.Forms.ComboBox();
             this.comboBoxCategory = new System.Windows.Forms.ComboBox();
             this.comboBoxTopic = new System.Windows.Forms.ComboBox();
             this.label6 = new System.Windows.Forms.Label();
-            this.buttonDeleteQuestion = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxImage)).BeginInit();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
@@ -86,17 +84,6 @@
             this.pictureBoxImage.TabIndex = 6;
             this.pictureBoxImage.TabStop = false;
             // 
-            // textBoxImageBase64
-            // 
-            this.textBoxImageBase64.Location = new System.Drawing.Point(169, 575);
-            this.textBoxImageBase64.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.textBoxImageBase64.Multiline = true;
-            this.textBoxImageBase64.Name = "textBoxImageBase64";
-            this.textBoxImageBase64.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.textBoxImageBase64.Size = new System.Drawing.Size(662, 56);
-            this.textBoxImageBase64.TabIndex = 7;
-            this.textBoxImageBase64.TextChanged += new System.EventHandler(this.TextBoxtextBoxImageBase64_TextChanged);
-            // 
             // buttonPaste
             // 
             this.buttonPaste.Location = new System.Drawing.Point(10, 298);
@@ -107,17 +94,6 @@
             this.buttonPaste.Text = "Paste New Image";
             this.buttonPaste.UseVisualStyleBackColor = true;
             this.buttonPaste.Click += new System.EventHandler(this.ButtonPaste_Click);
-            // 
-            // buttonShowImageString
-            // 
-            this.buttonShowImageString.Location = new System.Drawing.Point(4, 605);
-            this.buttonShowImageString.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.buttonShowImageString.Name = "buttonShowImageString";
-            this.buttonShowImageString.Size = new System.Drawing.Size(156, 27);
-            this.buttonShowImageString.TabIndex = 11;
-            this.buttonShowImageString.Text = "Encode to base64 string";
-            this.buttonShowImageString.UseVisualStyleBackColor = true;
-            this.buttonShowImageString.Click += new System.EventHandler(this.ButtonShowImageString_Click);
             // 
             // buttonNext
             // 
@@ -220,12 +196,23 @@
             this.panel1.Controls.Add(this.label3);
             this.panel1.Controls.Add(this.label2);
             this.panel1.Controls.Add(this.pictureBoxImage);
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(853, 510);
             this.panel1.TabIndex = 23;
+            // 
+            // buttonDeleteQuestion
+            // 
+            this.buttonDeleteQuestion.Location = new System.Drawing.Point(508, 467);
+            this.buttonDeleteQuestion.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.buttonDeleteQuestion.Name = "buttonDeleteQuestion";
+            this.buttonDeleteQuestion.Size = new System.Drawing.Size(111, 27);
+            this.buttonDeleteQuestion.TabIndex = 26;
+            this.buttonDeleteQuestion.Text = "Delete Question";
+            this.buttonDeleteQuestion.UseVisualStyleBackColor = true;
+            this.buttonDeleteQuestion.Click += new System.EventHandler(this.ButtonDeleteQuestion_Click);
             // 
             // comboBoxAnswer
             // 
@@ -272,27 +259,15 @@
             this.label6.TabIndex = 8;
             this.label6.Text = "Question Image";
             // 
-            // buttonDeleteQuestion
-            // 
-            this.buttonDeleteQuestion.Location = new System.Drawing.Point(508, 467);
-            this.buttonDeleteQuestion.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.buttonDeleteQuestion.Name = "buttonDeleteQuestion";
-            this.buttonDeleteQuestion.Size = new System.Drawing.Size(111, 27);
-            this.buttonDeleteQuestion.TabIndex = 26;
-            this.buttonDeleteQuestion.Text = "Delete Question";
-            this.buttonDeleteQuestion.UseVisualStyleBackColor = true;
-            this.buttonDeleteQuestion.Click += new System.EventHandler(this.ButtonDeleteQuestion_Click);
-            // 
             // FormEditQuestion
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(853, 522);
+            this.ClientSize = new System.Drawing.Size(853, 510);
             this.Controls.Add(this.panel1);
-            this.Controls.Add(this.buttonShowImageString);
-            this.Controls.Add(this.textBoxImageBase64);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.MaximumSize = new System.Drawing.Size(869, 549);
             this.Name = "FormEditQuestion";
             this.ShowIcon = false;
             this.Text = "Question Image Viewer";
@@ -301,7 +276,6 @@
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -310,9 +284,7 @@
         private System.Windows.Forms.Button btnCancel;
         private System.Windows.Forms.Button btnOK;
         private System.Windows.Forms.PictureBox pictureBoxImage;
-        private System.Windows.Forms.TextBox textBoxImageBase64;
         private System.Windows.Forms.Button buttonPaste;
-        private System.Windows.Forms.Button buttonShowImageString;
         private System.Windows.Forms.Button buttonNext;
         private System.Windows.Forms.TextBox textBoxQuestionName;
         private System.Windows.Forms.Button buttonBack;

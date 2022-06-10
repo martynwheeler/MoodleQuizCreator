@@ -37,25 +37,13 @@ namespace MoodleQuizCreator.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("D:\\")]
+        [global::System.Configuration.DefaultSettingValueAttribute("C:\\")]
         public string LastFileLocation {
             get {
                 return ((string)(this["LastFileLocation"]));
             }
             set {
                 this["LastFileLocation"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("tabPageALevel")]
-        public string selectedTab {
-            get {
-                return ((string)(this["selectedTab"]));
-            }
-            set {
-                this["selectedTab"] = value;
             }
         }
         

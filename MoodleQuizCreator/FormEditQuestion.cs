@@ -109,26 +109,6 @@ namespace MoodleQuizCreator
             }
         }
 
-        private void ButtonShowImageString_Click(object sender, EventArgs e)
-        {
-            //Stop checking for changes
-            textBoxImageBase64.TextChanged -= TextBoxtextBoxImageBase64_TextChanged;
-            //Convert image to string
-            textBoxImageBase64.Text = Convert.ToBase64String(ClassUtils.ImageToByte(pictureBoxImage.Image));
-            //Start checking for changes
-            textBoxImageBase64.TextChanged += TextBoxtextBoxImageBase64_TextChanged;
-        }
-
-        private void TextBoxtextBoxImageBase64_TextChanged(object sender, EventArgs e)
-        {
-            if (ClassUtils.IsBase64String(textBoxImageBase64.Text) && textBoxImageBase64.Text.Length > 0)
-            {
-                pictureBoxImage.Image = ClassUtils.ByteToImage(Convert.FromBase64String(textBoxImageBase64.Text));
-                QuestionDataChanged = true;
-                hasChanged = true;
-            }
-        }
-
         private void ButtonUpdateQuestion_Click(object sender, EventArgs e)
         {
             DataGridView dgv = (DataGridView)this.Owner.Controls["tabControlMain"].Controls["tabPageQuestionData"].Controls["dataGridViewQuestions"];

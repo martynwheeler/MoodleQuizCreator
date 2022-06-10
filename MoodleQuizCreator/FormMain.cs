@@ -22,17 +22,7 @@ namespace MoodleQuizCreator
         public FormMain()
         {
             InitializeComponent();
-            var items = new BindingList<KeyValuePair<string, string>>();
-            items.Add(new KeyValuePair<string, string>("Multiple Choice", "multichoice"));
-            items.Add(new KeyValuePair<string, string>("Numerical", "numerical"));
-            comboBoxType.DataSource = items;
-            comboBoxType.DisplayMember = "Key";
-            comboBoxType.ValueMember = "Value";
-        }
 
-        // Form
-        private void Main_Load(object sender, EventArgs e)
-        {
             //Build datatable to hold questions - may wish to load this from a file?
             Datatable.Columns.Add("Question Type");
             Datatable.Columns.Add("Question Topic");
@@ -48,20 +38,47 @@ namespace MoodleQuizCreator
             dataGridViewQuestions.DataSource = Datatable;
             dataGridViewQuestions.Columns["Question Image"].Visible = false;
 
+            //Initialise radiobuttons and treeview visibility
+            radioButtonALevel.Checked = true;
+            treeViewGCSE.Visible = radioButtonGCSE.Checked;
+            treeViewALevel.Visible = radioButtonALevel.Checked;
+
+            //Combobox for question type
+            var items = new BindingList<KeyValuePair<string, string>>
+            {
+                new KeyValuePair<string, string>("Multiple Choice", "multichoice"),
+                new KeyValuePair<string, string>("Numerical", "numerical")
+            };
+            comboBoxType.DataSource = items;
+            comboBoxType.DisplayMember = "Key";
+            comboBoxType.ValueMember = "Value";
+
             // Adds our form to the chain of clipboard viewers.
             Clipboard.Clear();
             sharpClipboard1.MonitorClipboard = true;
 
+            comboBoxAnswers.Text = "Select";
+            comboBoxType.Text = "Multiple Choice";
+            textBoxTolerance.Visible = false;
+            labelTolerance.Visible = false;
+            textBoxUnit.Visible = false;
+            labelUnit.Visible = false;
+            pictureBox1.SizeMode = PictureBoxSizeMode.Zoom;
+
+            //enable and disable menu items
+            toolsToolStripMenuItem.Enabled = true;
+            questionsToolStripMenuItem.Enabled = false;
+        }
+
+        // Form
+        private void Main_Load(object sender, EventArgs e)
+        {
             //Load settings
             if (Settings.Default.ExamPaperName != null)
             {
                 txtExamPaperName.Text = Settings.Default.ExamPaperName;
             }
-            if (Settings.Default.selectedTab != null)
-            {
-                tabControlSubject.SelectedTab = tabControlSubject.TabPages[Settings.Default.selectedTab];
-            }
-            if (Settings.Default.LastFileLocation != null)
+            if (Directory.Exists(Settings.Default.LastFileLocation))
             {
                 saveFileDialog1.InitialDirectory = Settings.Default.LastFileLocation;
                 openFileDialog1.InitialDirectory = Settings.Default.LastFileLocation;
@@ -78,14 +95,6 @@ namespace MoodleQuizCreator
                 Location = Settings.Default.Location;
                 Size = Settings.Default.Size;
             }
-
-            comboBoxAnswers.Text = "Select";
-            comboBoxType.Text = "Multiple Choice";
-            textBoxTolerance.Visible = false;
-            labelTolerance.Visible = false;
-            textBoxUnit.Visible = false;
-            labelUnit.Visible = false;
-            pictureBox1.SizeMode = PictureBoxSizeMode.Zoom;
 
             // Load treeview from xml file
             try
@@ -107,10 +116,11 @@ namespace MoodleQuizCreator
                 MessageBox.Show("Fatal Error, missing xml files.  The application will now terminate.", FormMain.ActiveForm.Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 Application.Exit();
             }
+        }
 
-            //enable and disable menu items
-            toolsToolStripMenuItem.Enabled = true;
-            questionsToolStripMenuItem.Enabled = false;
+        private void FormMain_ResizeBegin(object sender, EventArgs e)
+        {
+            savedWindowState = WindowState;
         }
 
         private void Main_Resize(object sender, EventArgs e)
@@ -163,7 +173,6 @@ namespace MoodleQuizCreator
                 }
 
                 Settings.Default.ExamPaperName = txtExamPaperName.Text;
-                Settings.Default.selectedTab = tabControlSubject.SelectedTab.Name;
                 Settings.Default.Save();
             }
         }
@@ -249,7 +258,7 @@ namespace MoodleQuizCreator
         // Menu Items
         private void SaveToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (currentFileName == null)
+            if (currentFileName == null || Path.GetExtension(currentFileName).ToLower().Equals(".csv"))
             {
                 saveFileDialog1.Title = "Save questions to file";
                 saveFileDialog1.CheckPathExists = true;
@@ -258,9 +267,11 @@ namespace MoodleQuizCreator
                 if (saveFileDialog1.ShowDialog() == DialogResult.OK)
                 {
                     currentFileName = saveFileDialog1.FileName;
+                    saveFileDialog1.InitialDirectory = Path.GetDirectoryName(currentFileName);
+                    Settings.Default.LastFileLocation = saveFileDialog1.InitialDirectory;
                     if (SaveQuestionsToXML(currentFileName))
                     {
-                        MessageBox.Show("You have successfully saved the questions to file.", "Message", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        MessageBox.Show("You have successfully saved the questions to file", "Message", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                 }
             }
@@ -268,7 +279,7 @@ namespace MoodleQuizCreator
             {
                 if (SaveQuestionsToXML(currentFileName))
                 {
-                    MessageBox.Show("You have successfully saved the questions to file.", "Message", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("You have successfully saved the questions to file", "Message", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }
         }
@@ -282,9 +293,11 @@ namespace MoodleQuizCreator
             if (saveFileDialog1.ShowDialog() == DialogResult.OK)
             {
                 currentFileName = saveFileDialog1.FileName;
+                saveFileDialog1.InitialDirectory = Path.GetDirectoryName(currentFileName);
+                Settings.Default.LastFileLocation = saveFileDialog1.InitialDirectory;
                 if (SaveQuestionsToXML(currentFileName))
                 {
-                    MessageBox.Show("You have successfully saved the questions to file.", "Message", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("You have successfully saved the questions to file", "Message", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }
         }
@@ -315,7 +328,42 @@ namespace MoodleQuizCreator
                 if (openFileDialog1.ShowDialog() == DialogResult.OK)
                 {
                     currentFileName = openFileDialog1.FileName;
+                    openFileDialog1.InitialDirectory = Path.GetDirectoryName(currentFileName);
+                    Settings.Default.LastFileLocation = openFileDialog1.InitialDirectory;
                     LoadQuestionsFromXML(currentFileName);
+                }
+            }
+        }
+
+        private void OpenCSVToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            //should check if existing data and save
+            DialogResult dialogResult = DialogResult.No;
+            if (unsavedQuestions)
+            {
+                const string message = "You have unsaved questions, cancel?";
+                const string caption = "Warning";
+                dialogResult = MessageBox.Show(message, caption,
+                                             MessageBoxButtons.YesNo,
+                                             MessageBoxIcon.Question);
+            }
+
+            // If the no button was pressed ...
+            if (dialogResult == DialogResult.No)
+            {
+                Datatable.Clear();
+                unsavedQuestions = false;
+                openFileDialog1.Title = "Open existing questions file";
+                openFileDialog1.FileName = "";
+                openFileDialog1.CheckPathExists = true;
+                openFileDialog1.DefaultExt = "csv";
+                openFileDialog1.Filter = "csv files (*.csv)|*.csv";
+                if (openFileDialog1.ShowDialog() == DialogResult.OK)
+                {
+                    currentFileName = openFileDialog1.FileName;
+                    openFileDialog1.InitialDirectory = Path.GetDirectoryName(currentFileName);
+                    Settings.Default.LastFileLocation = openFileDialog1.InitialDirectory;
+                    LoadQuestionsFromCSV();
                 }
             }
         }
@@ -355,7 +403,7 @@ namespace MoodleQuizCreator
             addCatForm.ShowDialog();
             if (addCatForm.NewCategory != "")
             {
-                if (this.tabControlSubject.SelectedTab == this.tabControlSubject.TabPages["tabPageGCSE"])
+                if (radioButtonGCSE.Checked)
                 {
                     try
                     {
@@ -394,7 +442,7 @@ namespace MoodleQuizCreator
             {
                 "Please select a category..."
             };
-            if (this.tabControlSubject.SelectedTab == this.tabControlSubject.TabPages["tabPageGCSE"])
+            if (radioButtonGCSE.Checked)
             {
                 foreach (TreeNode tn in treeViewGCSE.Nodes)
                 {
@@ -413,7 +461,7 @@ namespace MoodleQuizCreator
             addSubCatForm.ShowDialog();
             if (addSubCatForm.NewSubCategory != "")
             {
-                if (this.tabControlSubject.SelectedTab == this.tabControlSubject.TabPages["tabPageGCSE"])
+                if (radioButtonGCSE.Checked)
                 {
                     try
                     {
@@ -457,7 +505,7 @@ namespace MoodleQuizCreator
                 DialogResult dl = MessageBox.Show("Are you sure you wish to delete the selected item?", FormMain.ActiveForm.Text, MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
                 if (dl == DialogResult.Yes)
                 {
-                    if (this.tabControlSubject.SelectedTab == this.tabControlSubject.TabPages["tabPageGCSE"])
+                    if (radioButtonGCSE.Checked)
                     {
                         try
                         {
@@ -507,7 +555,7 @@ namespace MoodleQuizCreator
 
         private void SaveTreeViewToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (this.tabControlSubject.SelectedTab == this.tabControlSubject.TabPages["tabPageGCSE"])
+            if (radioButtonGCSE.Checked)
             {
                 try
                 {
@@ -634,7 +682,7 @@ namespace MoodleQuizCreator
             ViewSelectedQuestion();
         }
 
-        private void SharpClipboard1_ClipboardChanged(object sender, WK.Libraries.SharpClipboardNS.SharpClipboard.ClipboardChangedEventArgs e)
+        private void SharpClipboard1_ClipboardChanged(object sender, SharpClipboard.ClipboardChangedEventArgs e)
         {
             // Is the content copied of image type?
             if (e.ContentType == SharpClipboard.ContentTypes.Image)
@@ -649,6 +697,37 @@ namespace MoodleQuizCreator
                 TopMost = false;
                 tabControlMain.SelectTab(0);
             }
+        }
+
+        private void ComboBoxType_SelectedValueChanged(object sender, EventArgs e)
+        {
+            switch (comboBoxType.Text)
+            {
+                case "Multiple Choice":
+                    comboBoxAnswers.DropDownStyle = ComboBoxStyle.DropDownList;
+                    comboBoxAnswers.Text = "Select";
+                    textBoxTolerance.Visible = false;
+                    labelTolerance.Visible = false;
+                    textBoxUnit.Visible = false;
+                    labelUnit.Visible = false;
+                    break;
+                case "Numerical":
+                    comboBoxAnswers.DropDownStyle = ComboBoxStyle.Simple;
+                    comboBoxAnswers.Text = "";
+                    textBoxTolerance.Visible = true;
+                    labelTolerance.Visible = true;
+                    textBoxUnit.Visible = true;
+                    labelUnit.Visible = true;
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        private void RadioButtonGCSE_CheckedChanged(object sender, EventArgs e)
+        {
+            treeViewGCSE.Visible = radioButtonGCSE.Checked;
+            treeViewALevel.Visible = radioButtonALevel.Checked;
         }
 
         // Functions
@@ -670,15 +749,12 @@ namespace MoodleQuizCreator
         {
             if (dataGridViewQuestions.SelectedRows.Count == 1)
             {
-//                int selectedRowIndex = dataGridViewQuestions.SelectedRows[0].Index;
                 int selectedRowIndex = dataGridViewQuestions.CurrentRow.Index;
 
                 if (selectedRowIndex < dataGridViewQuestions.RowCount - 1)
                 {
                     //Datarow is the selected item
                     DataRow dataRow = ((DataRowView)dataGridViewQuestions.CurrentRow.DataBoundItem).Row;
-//                    DataRow dataRow = ((DataRowView)dataGridViewQuestions.SelectedRows[0].DataBoundItem).Row;
-//                    DataRow dataRow = Datatable.Rows[selectedRowIndex];
 
                     //stop monitoring clipboard
                     sharpClipboard1.MonitorClipboard = false;
@@ -690,7 +766,10 @@ namespace MoodleQuizCreator
                         formEditQuestion.QuestionRow = dataRow;
 
                         //create a datatable of the current treeview
-                        formEditQuestion.QuestionSubject = TreeViewtoSubject(treeViewALevel);
+                        if (radioButtonGCSE.Checked)
+                            formEditQuestion.QuestionSubject = TreeViewtoSubject(treeViewGCSE);
+                        else
+                            formEditQuestion.QuestionSubject = TreeViewtoSubject(treeViewALevel);
 
                         //show the form
                         if (formEditQuestion.ShowDialog(this) == DialogResult.OK)
@@ -837,7 +916,7 @@ namespace MoodleQuizCreator
             if (pictureBox1.Image != null)
             {
                 TreeNode tn;
-                if (tabControlSubject.SelectedTab == tabControlSubject.TabPages["tabPageGCSE"])
+                if (radioButtonGCSE.Checked)
                 {
                     tn = treeViewGCSE.SelectedNode;
                 }
@@ -944,7 +1023,8 @@ namespace MoodleQuizCreator
 
                         case "multichoice":
                             //Create a new datarow
-                            DataRow myDataRow = this.Datatable.NewRow();
+                            DataRow myDataRow;
+                            myDataRow = this.Datatable.NewRow();
                             myDataRow["Question Type"] = "multichoice";
                             myDataRow["Question Topic"] = questionTopic;
                             myDataRow["Question Category"] = questionCategory;
@@ -963,22 +1043,40 @@ namespace MoodleQuizCreator
                             break;
 
                         case "numerical":
+                            //Create a new datarow
+                            myDataRow = this.Datatable.NewRow();
+                            myDataRow["Question Type"] = "numerical";
+                            myDataRow["Question Topic"] = questionTopic;
+                            myDataRow["Question Category"] = questionCategory;
+                            myDataRow["Question Name"] = question.name.First().text;
+                            myDataRow["Question Image"] = Convert.FromBase64String(
+                                Regex.Match(question.questiontext.First().text, "<img.+?src=[\"'](.+?)[\"'].*?>", RegexOptions.IgnoreCase).Groups[1].Value.Replace("data:image/png;base64,", "")
+                                );
+                            //There should only be one answer and unit in the file - could extend by using a foreach loop
+                            myDataRow["Question Answer"] = question.answer.FirstOrDefault()!.text;
+                            myDataRow["Question Tolerance"] = question.answer.FirstOrDefault()!.tolerance;
+                            myDataRow["Question Unit"] = question.units.FirstOrDefault()!.unit_name;
+                            this.Datatable.Rows.Add(myDataRow);
                             break;
 
                         default:
                             break;
                     }
                 }
-                MessageBox.Show("You have successfully loaded the questions from file.", "Message", MessageBoxButtons.OK, MessageBoxIcon.Information);
+//                MessageBox.Show("You have successfully loaded the questions from file", "Message", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 unsavedQuestions = false;
-                tabControlMain.SelectTab(1);
+                tabControlMain.SelectTab(tabPageQuestionData);
+                if (quizdata!.level == "GCSE")
+                    radioButtonGCSE.Checked = true;
+                else
+                    radioButtonALevel.Checked = true;
                 dataGridViewQuestions.Rows[0].Selected = true;
             }
             catch (IOException)
             {
                 MessageBox.Show("File " + currentFileName + " is open in another process, please close the file and try again", FormMain.ActiveForm.Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-            catch
+            catch (Exception)
             {
                 MessageBox.Show("File " + currentFileName + " is not valid, please check the file and try again", FormMain.ActiveForm.Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
@@ -990,6 +1088,11 @@ namespace MoodleQuizCreator
             {
                 //Object representation of xml
                 quiz quiz = new();
+
+                if (radioButtonGCSE.Checked)
+                    quiz.level = "GCSE";
+                else
+                    quiz.level = "A-Level";
 
                 List<quizQuestion> questions = new();
 
@@ -1007,8 +1110,9 @@ namespace MoodleQuizCreator
                     };
                     questions.Add(question);
 
-                    switch ((string)row["Question Type"])
+                    switch (row["Question Type"].ToString())
                     {
+                        case "": //blank defaults to MCQ
                         case "multichoice":
                             //create a new question with a multichoice type
                             string[] answers = { "A", "B", "C", "D" };
@@ -1084,7 +1188,7 @@ namespace MoodleQuizCreator
                                             "\" class=\"img-responsive\" /></p>",
                                     }
                                 },
-                                generalfeedback = new() { new quizQuestionGeneralfeedback() { text = "" } },
+                                generalfeedback = new() { new quizQuestionGeneralfeedback() { text = "", format = "html", } },
                                 defaultgrade = "1.0000000",
                                 penalty = ".0000000",
                                 hidden = "0",
@@ -1097,8 +1201,21 @@ namespace MoodleQuizCreator
                                         format = "html",
                                         text = (string)row["Question Answer"],
                                         feedback = new() { new quizQuestionAnswerFeedback() { format = "html", text = "" } },
+                                        tolerance = (string)row["Question Tolerance"],
                                     }
                                 },
+                                units = new()
+                                {
+                                    new quizQuestionUnitsUnit()
+                                    {
+                                        multiplier = "1",
+                                        unit_name = (string)row["Question Unit"],
+                                    }
+                                },
+                                unitgradingtype = "1",
+                                unitpenalty = "0.1000000",
+                                showunits = "0",
+                                unitsleft = "0",
                             };
                             questions.Add(question);
                             break;
@@ -1164,7 +1281,7 @@ namespace MoodleQuizCreator
         private void EditNode()
         {
             using FormEditNode editNodeForm = new();
-            if (this.tabControlSubject.SelectedTab == this.tabControlSubject.TabPages["tabPageGCSE"])
+            if (radioButtonGCSE.Checked)
             {
                 editNodeForm.EditCategory = treeViewGCSE.SelectedNode.Text;
             }
@@ -1176,7 +1293,7 @@ namespace MoodleQuizCreator
             //show the form
             if (editNodeForm.ShowDialog() == DialogResult.OK)
             {
-                if (this.tabControlSubject.SelectedTab == this.tabControlSubject.TabPages["tabPageGCSE"])
+                if (radioButtonGCSE.Checked)
                 {
                     treeViewGCSE.SelectedNode.Text = editNodeForm.EditCategory;
                     SaveTreeView(this.treeViewGCSE, Application.StartupPath + "\\GCSECategories.xml");
@@ -1202,6 +1319,7 @@ namespace MoodleQuizCreator
                     {
                         var record = csv.GetRecord<ClassMCQRecord>();
                         DataRow myDataRow = Datatable.NewRow();
+                        myDataRow["Question Type"] = "multichoice";
                         myDataRow["Question Topic"] = record.Topic;
                         myDataRow["Question Category"] = record.Category;
                         myDataRow["Question Name"] = record.Name;
@@ -1210,9 +1328,9 @@ namespace MoodleQuizCreator
                         Datatable.Rows.Add(myDataRow);
                     }
                 }
-                MessageBox.Show("You have successfully loaded the questions from file.", "Message", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Remember to set the level", "Message", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 unsavedQuestions = false;
-                tabControlMain.SelectTab(1);
+                tabControlMain.SelectTab(tabPageQuestionData);
                 dataGridViewQuestions.Rows[0].Selected = true;
             }
             catch (CsvHelper.MissingFieldException)
@@ -1438,31 +1556,6 @@ namespace MoodleQuizCreator
                 {
                     MessageBox.Show(ex.Message, "Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
-            }
-        }
-
-        private void ComboBoxType_SelectedValueChanged(object sender, EventArgs e)
-        {
-            switch (comboBoxType.Text)
-            {
-                case "Multiple Choice":
-                    comboBoxAnswers.DropDownStyle = ComboBoxStyle.DropDownList;
-                    comboBoxAnswers.Text = "Select";
-                    textBoxTolerance.Visible = false;
-                    labelTolerance.Visible = false;
-                    textBoxUnit.Visible = false;
-                    labelUnit.Visible = false;
-                    break;
-                case "Numerical":
-                    comboBoxAnswers.DropDownStyle = ComboBoxStyle.Simple;
-                    comboBoxAnswers.Text = "";
-                    textBoxTolerance.Visible = true;
-                    labelTolerance.Visible = true;
-                    textBoxUnit.Visible = true;
-                    labelUnit.Visible = true;
-                    break;
-                default:
-                    break;
             }
         }
     }

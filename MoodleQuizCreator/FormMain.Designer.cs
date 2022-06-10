@@ -40,6 +40,7 @@
             this.fileToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.newToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.openCSVToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator = new System.Windows.Forms.ToolStripSeparator();
             this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveAsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -65,6 +66,10 @@
             this.tabPageControlPanel = new System.Windows.Forms.TabPage();
             this.splitContainerMain = new System.Windows.Forms.SplitContainer();
             this.panelControl = new System.Windows.Forms.Panel();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.radioButtonGCSE = new System.Windows.Forms.RadioButton();
+            this.radioButtonALevel = new System.Windows.Forms.RadioButton();
+            this.label6 = new System.Windows.Forms.Label();
             this.labelUnit = new System.Windows.Forms.Label();
             this.labelTolerance = new System.Windows.Forms.Label();
             this.textBoxUnit = new System.Windows.Forms.TextBox();
@@ -84,11 +89,8 @@
             this.btnReset = new System.Windows.Forms.Button();
             this.numCounter = new System.Windows.Forms.NumericUpDown();
             this.label1 = new System.Windows.Forms.Label();
-            this.tabControlSubject = new System.Windows.Forms.TabControl();
-            this.tabPageGCSE = new System.Windows.Forms.TabPage();
-            this.treeViewGCSE = new System.Windows.Forms.TreeView();
-            this.tabPageALevel = new System.Windows.Forms.TabPage();
             this.treeViewALevel = new System.Windows.Forms.TreeView();
+            this.treeViewGCSE = new System.Windows.Forms.TreeView();
             this.tabControlMain = new System.Windows.Forms.TabControl();
             this.sharpClipboard1 = new WK.Libraries.SharpClipboardNS.SharpClipboard(this.components);
             this.contextMenuStrip1.SuspendLayout();
@@ -101,11 +103,9 @@
             this.splitContainerMain.Panel2.SuspendLayout();
             this.splitContainerMain.SuspendLayout();
             this.panelControl.SuspendLayout();
+            this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numCounter)).BeginInit();
-            this.tabControlSubject.SuspendLayout();
-            this.tabPageGCSE.SuspendLayout();
-            this.tabPageALevel.SuspendLayout();
             this.tabControlMain.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -157,6 +157,7 @@
             this.fileToolStripMenuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.newToolStripMenuItem,
             this.openToolStripMenuItem1,
+            this.openCSVToolStripMenuItem,
             this.toolStripSeparator,
             this.saveToolStripMenuItem,
             this.saveAsToolStripMenuItem,
@@ -184,6 +185,13 @@
             this.openToolStripMenuItem1.Size = new System.Drawing.Size(141, 22);
             this.openToolStripMenuItem1.Text = "&Open";
             this.openToolStripMenuItem1.Click += new System.EventHandler(this.OpenToolStripMenuItem1_Click);
+            // 
+            // openCSVToolStripMenuItem
+            // 
+            this.openCSVToolStripMenuItem.Name = "openCSVToolStripMenuItem";
+            this.openCSVToolStripMenuItem.Size = new System.Drawing.Size(141, 22);
+            this.openCSVToolStripMenuItem.Text = "Open &CSV";
+            this.openCSVToolStripMenuItem.Click += new System.EventHandler(this.OpenCSVToolStripMenuItem_Click);
             // 
             // toolStripSeparator
             // 
@@ -334,7 +342,7 @@
             this.tabPageQuestionData.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.tabPageQuestionData.Name = "tabPageQuestionData";
             this.tabPageQuestionData.Padding = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.tabPageQuestionData.Size = new System.Drawing.Size(1693, 618);
+            this.tabPageQuestionData.Size = new System.Drawing.Size(1693, 650);
             this.tabPageQuestionData.TabIndex = 1;
             this.tabPageQuestionData.Text = "Question Data";
             this.tabPageQuestionData.UseVisualStyleBackColor = true;
@@ -364,7 +372,7 @@
             this.dataGridViewQuestions.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.dataGridViewQuestions.Name = "dataGridViewQuestions";
             this.dataGridViewQuestions.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridViewQuestions.Size = new System.Drawing.Size(1685, 612);
+            this.dataGridViewQuestions.Size = new System.Drawing.Size(1685, 644);
             this.dataGridViewQuestions.TabIndex = 0;
             this.dataGridViewQuestions.RowHeaderMouseDoubleClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.DataGridViewQuestions_RowHeaderMouseDoubleClick);
             this.dataGridViewQuestions.RowPostPaint += new System.Windows.Forms.DataGridViewRowPostPaintEventHandler(this.DataGridView_RowPostPaint);
@@ -378,7 +386,7 @@
             this.tabPageControlPanel.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.tabPageControlPanel.Name = "tabPageControlPanel";
             this.tabPageControlPanel.Padding = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.tabPageControlPanel.Size = new System.Drawing.Size(1693, 618);
+            this.tabPageControlPanel.Size = new System.Drawing.Size(1693, 650);
             this.tabPageControlPanel.TabIndex = 0;
             this.tabPageControlPanel.Text = "Control Panel";
             // 
@@ -396,14 +404,17 @@
             // 
             // splitContainerMain.Panel2
             // 
-            this.splitContainerMain.Panel2.Controls.Add(this.tabControlSubject);
-            this.splitContainerMain.Size = new System.Drawing.Size(1685, 612);
+            this.splitContainerMain.Panel2.Controls.Add(this.treeViewALevel);
+            this.splitContainerMain.Panel2.Controls.Add(this.treeViewGCSE);
+            this.splitContainerMain.Size = new System.Drawing.Size(1685, 644);
             this.splitContainerMain.SplitterDistance = 600;
             this.splitContainerMain.SplitterWidth = 5;
             this.splitContainerMain.TabIndex = 17;
             // 
             // panelControl
             // 
+            this.panelControl.Controls.Add(this.panel1);
+            this.panelControl.Controls.Add(this.label6);
             this.panelControl.Controls.Add(this.labelUnit);
             this.panelControl.Controls.Add(this.labelTolerance);
             this.panelControl.Controls.Add(this.textBoxUnit);
@@ -427,13 +438,55 @@
             this.panelControl.Location = new System.Drawing.Point(0, 0);
             this.panelControl.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.panelControl.Name = "panelControl";
-            this.panelControl.Size = new System.Drawing.Size(600, 612);
+            this.panelControl.Size = new System.Drawing.Size(600, 644);
             this.panelControl.TabIndex = 17;
+            // 
+            // panel1
+            // 
+            this.panel1.Controls.Add(this.radioButtonGCSE);
+            this.panel1.Controls.Add(this.radioButtonALevel);
+            this.panel1.Location = new System.Drawing.Point(126, 11);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(168, 25);
+            this.panel1.TabIndex = 28;
+            // 
+            // radioButtonGCSE
+            // 
+            this.radioButtonGCSE.AutoSize = true;
+            this.radioButtonGCSE.Location = new System.Drawing.Point(3, 1);
+            this.radioButtonGCSE.Name = "radioButtonGCSE";
+            this.radioButtonGCSE.Size = new System.Drawing.Size(53, 19);
+            this.radioButtonGCSE.TabIndex = 28;
+            this.radioButtonGCSE.TabStop = true;
+            this.radioButtonGCSE.Text = "GCSE";
+            this.radioButtonGCSE.UseVisualStyleBackColor = true;
+            this.radioButtonGCSE.CheckedChanged += new System.EventHandler(this.RadioButtonGCSE_CheckedChanged);
+            // 
+            // radioButtonALevel
+            // 
+            this.radioButtonALevel.AutoSize = true;
+            this.radioButtonALevel.Location = new System.Drawing.Point(59, 1);
+            this.radioButtonALevel.Name = "radioButtonALevel";
+            this.radioButtonALevel.Size = new System.Drawing.Size(65, 19);
+            this.radioButtonALevel.TabIndex = 27;
+            this.radioButtonALevel.TabStop = true;
+            this.radioButtonALevel.Text = "A-Level";
+            this.radioButtonALevel.UseVisualStyleBackColor = true;
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(77, 16);
+            this.label6.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(34, 15);
+            this.label6.TabIndex = 26;
+            this.label6.Text = "Level";
             // 
             // labelUnit
             // 
             this.labelUnit.AutoSize = true;
-            this.labelUnit.Location = new System.Drawing.Point(387, 523);
+            this.labelUnit.Location = new System.Drawing.Point(387, 545);
             this.labelUnit.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labelUnit.Name = "labelUnit";
             this.labelUnit.Size = new System.Drawing.Size(29, 15);
@@ -443,7 +496,7 @@
             // labelTolerance
             // 
             this.labelTolerance.AutoSize = true;
-            this.labelTolerance.Location = new System.Drawing.Point(254, 523);
+            this.labelTolerance.Location = new System.Drawing.Point(254, 545);
             this.labelTolerance.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labelTolerance.Name = "labelTolerance";
             this.labelTolerance.Size = new System.Drawing.Size(57, 15);
@@ -452,14 +505,14 @@
             // 
             // textBoxUnit
             // 
-            this.textBoxUnit.Location = new System.Drawing.Point(387, 544);
+            this.textBoxUnit.Location = new System.Drawing.Point(387, 566);
             this.textBoxUnit.Name = "textBoxUnit";
             this.textBoxUnit.Size = new System.Drawing.Size(113, 23);
             this.textBoxUnit.TabIndex = 23;
             // 
             // textBoxTolerance
             // 
-            this.textBoxTolerance.Location = new System.Drawing.Point(254, 544);
+            this.textBoxTolerance.Location = new System.Drawing.Point(254, 566);
             this.textBoxTolerance.Name = "textBoxTolerance";
             this.textBoxTolerance.Size = new System.Drawing.Size(113, 23);
             this.textBoxTolerance.TabIndex = 22;
@@ -470,7 +523,7 @@
             this.comboBoxType.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
             this.comboBoxType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxType.FormattingEnabled = true;
-            this.comboBoxType.Location = new System.Drawing.Point(126, 508);
+            this.comboBoxType.Location = new System.Drawing.Point(126, 530);
             this.comboBoxType.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.comboBoxType.Name = "comboBoxType";
             this.comboBoxType.Size = new System.Drawing.Size(112, 23);
@@ -480,7 +533,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(33, 511);
+            this.label5.Location = new System.Drawing.Point(33, 533);
             this.label5.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(82, 15);
@@ -499,7 +552,7 @@
             "B",
             "C",
             "D"});
-            this.comboBoxAnswers.Location = new System.Drawing.Point(125, 544);
+            this.comboBoxAnswers.Location = new System.Drawing.Point(125, 566);
             this.comboBoxAnswers.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.comboBoxAnswers.Name = "comboBoxAnswers";
             this.comboBoxAnswers.Size = new System.Drawing.Size(112, 23);
@@ -508,7 +561,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(18, 547);
+            this.label4.Location = new System.Drawing.Point(18, 569);
             this.label4.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(97, 15);
@@ -517,7 +570,7 @@
             // 
             // btnDiscard
             // 
-            this.btnDiscard.Location = new System.Drawing.Point(254, 579);
+            this.btnDiscard.Location = new System.Drawing.Point(254, 601);
             this.btnDiscard.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.btnDiscard.Name = "btnDiscard";
             this.btnDiscard.Size = new System.Drawing.Size(113, 27);
@@ -528,7 +581,7 @@
             // 
             // txtExamPaperName
             // 
-            this.txtExamPaperName.Location = new System.Drawing.Point(125, 20);
+            this.txtExamPaperName.Location = new System.Drawing.Point(125, 42);
             this.txtExamPaperName.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.txtExamPaperName.Name = "txtExamPaperName";
             this.txtExamPaperName.Size = new System.Drawing.Size(451, 23);
@@ -537,7 +590,7 @@
             // 
             // btnSaveImg
             // 
-            this.btnSaveImg.Location = new System.Drawing.Point(125, 579);
+            this.btnSaveImg.Location = new System.Drawing.Point(125, 601);
             this.btnSaveImg.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.btnSaveImg.Name = "btnSaveImg";
             this.btnSaveImg.Size = new System.Drawing.Size(113, 27);
@@ -549,7 +602,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(27, 113);
+            this.label3.Location = new System.Drawing.Point(27, 135);
             this.label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(84, 15);
@@ -559,7 +612,7 @@
             // pictureBox1
             // 
             this.pictureBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pictureBox1.Location = new System.Drawing.Point(125, 113);
+            this.pictureBox1.Location = new System.Drawing.Point(125, 135);
             this.pictureBox1.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(451, 383);
@@ -570,7 +623,7 @@
             // lblImagePreview
             // 
             this.lblImagePreview.AutoSize = true;
-            this.lblImagePreview.Location = new System.Drawing.Point(23, 83);
+            this.lblImagePreview.Location = new System.Drawing.Point(23, 105);
             this.lblImagePreview.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblImagePreview.Name = "lblImagePreview";
             this.lblImagePreview.Size = new System.Drawing.Size(90, 15);
@@ -579,7 +632,7 @@
             // 
             // txtQuestionName
             // 
-            this.txtQuestionName.Location = new System.Drawing.Point(125, 80);
+            this.txtQuestionName.Location = new System.Drawing.Point(125, 102);
             this.txtQuestionName.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.txtQuestionName.Name = "txtQuestionName";
             this.txtQuestionName.ReadOnly = true;
@@ -589,7 +642,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(13, 53);
+            this.label2.Location = new System.Drawing.Point(13, 75);
             this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(102, 15);
@@ -598,7 +651,7 @@
             // 
             // btnReset
             // 
-            this.btnReset.Location = new System.Drawing.Point(181, 47);
+            this.btnReset.Location = new System.Drawing.Point(181, 69);
             this.btnReset.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.btnReset.Name = "btnReset";
             this.btnReset.Size = new System.Drawing.Size(113, 27);
@@ -609,7 +662,7 @@
             // 
             // numCounter
             // 
-            this.numCounter.Location = new System.Drawing.Point(125, 48);
+            this.numCounter.Location = new System.Drawing.Point(125, 70);
             this.numCounter.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.numCounter.Name = "numCounter";
             this.numCounter.Size = new System.Drawing.Size(44, 23);
@@ -624,70 +677,33 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(42, 23);
+            this.label1.Location = new System.Drawing.Point(42, 45);
             this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(69, 15);
             this.label1.TabIndex = 9;
             this.label1.Text = "Exam Paper";
             // 
-            // tabControlSubject
+            // treeViewALevel
             // 
-            this.tabControlSubject.Controls.Add(this.tabPageGCSE);
-            this.tabControlSubject.Controls.Add(this.tabPageALevel);
-            this.tabControlSubject.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tabControlSubject.Location = new System.Drawing.Point(0, 0);
-            this.tabControlSubject.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.tabControlSubject.Name = "tabControlSubject";
-            this.tabControlSubject.SelectedIndex = 0;
-            this.tabControlSubject.Size = new System.Drawing.Size(1080, 612);
-            this.tabControlSubject.TabIndex = 15;
-            // 
-            // tabPageGCSE
-            // 
-            this.tabPageGCSE.Controls.Add(this.treeViewGCSE);
-            this.tabPageGCSE.Location = new System.Drawing.Point(4, 24);
-            this.tabPageGCSE.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.tabPageGCSE.Name = "tabPageGCSE";
-            this.tabPageGCSE.Padding = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.tabPageGCSE.Size = new System.Drawing.Size(1072, 584);
-            this.tabPageGCSE.TabIndex = 0;
-            this.tabPageGCSE.Text = "GCSE";
-            this.tabPageGCSE.UseVisualStyleBackColor = true;
+            this.treeViewALevel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.treeViewALevel.HideSelection = false;
+            this.treeViewALevel.Location = new System.Drawing.Point(0, 0);
+            this.treeViewALevel.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.treeViewALevel.Name = "treeViewALevel";
+            this.treeViewALevel.Size = new System.Drawing.Size(1080, 644);
+            this.treeViewALevel.TabIndex = 1;
             // 
             // treeViewGCSE
             // 
             this.treeViewGCSE.Dock = System.Windows.Forms.DockStyle.Fill;
             this.treeViewGCSE.HideSelection = false;
-            this.treeViewGCSE.Location = new System.Drawing.Point(4, 3);
+            this.treeViewGCSE.Location = new System.Drawing.Point(0, 0);
             this.treeViewGCSE.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.treeViewGCSE.Name = "treeViewGCSE";
-            this.treeViewGCSE.Size = new System.Drawing.Size(1064, 578);
+            this.treeViewGCSE.Size = new System.Drawing.Size(1080, 644);
             this.treeViewGCSE.TabIndex = 0;
             this.treeViewGCSE.NodeMouseDoubleClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.TreeView_NodeMouseDoubleClick);
-            // 
-            // tabPageALevel
-            // 
-            this.tabPageALevel.Controls.Add(this.treeViewALevel);
-            this.tabPageALevel.Location = new System.Drawing.Point(4, 24);
-            this.tabPageALevel.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.tabPageALevel.Name = "tabPageALevel";
-            this.tabPageALevel.Padding = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.tabPageALevel.Size = new System.Drawing.Size(1072, 584);
-            this.tabPageALevel.TabIndex = 1;
-            this.tabPageALevel.Text = "A-Level";
-            this.tabPageALevel.UseVisualStyleBackColor = true;
-            // 
-            // treeViewALevel
-            // 
-            this.treeViewALevel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.treeViewALevel.HideSelection = false;
-            this.treeViewALevel.Location = new System.Drawing.Point(4, 3);
-            this.treeViewALevel.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.treeViewALevel.Name = "treeViewALevel";
-            this.treeViewALevel.Size = new System.Drawing.Size(1064, 578);
-            this.treeViewALevel.TabIndex = 0;
-            this.treeViewALevel.NodeMouseDoubleClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.TreeView_NodeMouseDoubleClick);
             // 
             // tabControlMain
             // 
@@ -698,7 +714,7 @@
             this.tabControlMain.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.tabControlMain.Name = "tabControlMain";
             this.tabControlMain.SelectedIndex = 0;
-            this.tabControlMain.Size = new System.Drawing.Size(1701, 646);
+            this.tabControlMain.Size = new System.Drawing.Size(1701, 678);
             this.tabControlMain.TabIndex = 16;
             this.tabControlMain.SelectedIndexChanged += new System.EventHandler(this.TabControlMain_SelectedIndexChanged);
             // 
@@ -719,7 +735,7 @@
             this.AllowDrop = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1701, 670);
+            this.ClientSize = new System.Drawing.Size(1701, 702);
             this.Controls.Add(this.tabControlMain);
             this.Controls.Add(this.menuStrip1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -730,6 +746,7 @@
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Main_FormClosing);
             this.Load += new System.EventHandler(this.Main_Load);
+            this.ResizeBegin += new System.EventHandler(this.FormMain_ResizeBegin);
             this.DragDrop += new System.Windows.Forms.DragEventHandler(this.Main_DragDrop);
             this.DragEnter += new System.Windows.Forms.DragEventHandler(this.Main_DragEnter);
             this.Resize += new System.EventHandler(this.Main_Resize);
@@ -745,11 +762,10 @@
             this.splitContainerMain.ResumeLayout(false);
             this.panelControl.ResumeLayout(false);
             this.panelControl.PerformLayout();
+            this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numCounter)).EndInit();
-            this.tabControlSubject.ResumeLayout(false);
-            this.tabPageGCSE.ResumeLayout(false);
-            this.tabPageALevel.ResumeLayout(false);
             this.tabControlMain.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -798,11 +814,7 @@
         private System.Windows.Forms.Button btnReset;
         private System.Windows.Forms.NumericUpDown numCounter;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.TabControl tabControlSubject;
-        private System.Windows.Forms.TabPage tabPageGCSE;
         private System.Windows.Forms.TreeView treeViewGCSE;
-        private System.Windows.Forms.TabPage tabPageALevel;
-        private System.Windows.Forms.TreeView treeViewALevel;
         private System.Windows.Forms.TabControl tabControlMain;
         private System.Windows.Forms.ToolStripMenuItem questionsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem deleteSelectedToolStripMenuItem;
@@ -816,6 +828,12 @@
         private TextBox textBoxTolerance;
         private Label labelUnit;
         private Label labelTolerance;
+        private ToolStripMenuItem openCSVToolStripMenuItem;
+        private Panel panel1;
+        private RadioButton radioButtonGCSE;
+        private RadioButton radioButtonALevel;
+        private Label label6;
+        private TreeView treeViewALevel;
     }
 }
 

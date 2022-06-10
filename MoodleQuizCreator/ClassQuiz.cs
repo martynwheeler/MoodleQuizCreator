@@ -28,6 +28,8 @@ namespace MoodleQuizCreator
     {
         private List<quizQuestion> itemsField;
 
+        private string levelField;
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("question", Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public List<quizQuestion> Items
@@ -39,6 +41,20 @@ namespace MoodleQuizCreator
             set
             {
                 this.itemsField = value;
+            }
+        }
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttributeAttribute()]
+        public string level
+        {
+            get
+            {
+                return this.levelField;
+            }
+            set
+            {
+                this.levelField = value;
             }
         }
     }
@@ -85,6 +101,16 @@ namespace MoodleQuizCreator
         private List<quizQuestionIncorrectfeedback> incorrectfeedbackField;
 
         private List<quizQuestionAnswer> answerField;
+
+        private List<quizQuestionUnitsUnit> unitsField;
+
+        private string unitgradingtypeField;
+
+        private string unitpenaltyField;
+
+        private string showunitsField;
+
+        private string unitsleftField;
 
         private string typeField;
 
@@ -323,6 +349,77 @@ namespace MoodleQuizCreator
             set
             {
                 this.answerField = value;
+            }
+        }
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlArrayAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        [System.Xml.Serialization.XmlArrayItemAttribute("unit", typeof(quizQuestionUnitsUnit), Form = System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable = false)]
+        public List<quizQuestionUnitsUnit> units
+        {
+            get
+            {
+                return this.unitsField;
+            }
+            set
+            {
+                this.unitsField = value;
+            }
+        }
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string unitgradingtype
+        {
+            get
+            {
+                return this.unitgradingtypeField;
+            }
+            set
+            {
+                this.unitgradingtypeField = value;
+            }
+        }
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string unitpenalty
+        {
+            get
+            {
+                return this.unitpenaltyField;
+            }
+            set
+            {
+                this.unitpenaltyField = value;
+            }
+        }
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string showunits
+        {
+            get
+            {
+                return this.showunitsField;
+            }
+            set
+            {
+                this.showunitsField = value;
+            }
+        }
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string unitsleft
+        {
+            get
+            {
+                return this.unitsleftField;
+            }
+            set
+            {
+                this.unitsleftField = value;
             }
         }
 
@@ -660,6 +757,8 @@ namespace MoodleQuizCreator
 
         private List<quizQuestionAnswerFeedback> feedbackField;
 
+        private string toleranceField;
+
         private string fractionField;
 
         private string formatField;
@@ -689,6 +788,20 @@ namespace MoodleQuizCreator
             set
             {
                 this.feedbackField = value;
+            }
+        }
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string tolerance
+        {
+            get
+            {
+                return this.toleranceField;
+            }
+            set
+            {
+                this.toleranceField = value;
             }
         }
 
@@ -759,6 +872,48 @@ namespace MoodleQuizCreator
             set
             {
                 this.formatField = value;
+            }
+        }
+    }
+
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.8.3928.0")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
+    public partial class quizQuestionUnitsUnit
+    {
+
+        private string multiplierField;
+
+        private string unit_nameField;
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string multiplier
+        {
+            get
+            {
+                return this.multiplierField;
+            }
+            set
+            {
+                this.multiplierField = value;
+            }
+        }
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string unit_name
+        {
+            get
+            {
+                return this.unit_nameField;
+            }
+            set
+            {
+                this.unit_nameField = value;
             }
         }
     }
