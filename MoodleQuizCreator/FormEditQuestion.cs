@@ -72,12 +72,10 @@ namespace MoodleQuizCreator
             }
             
             DataGridView dgv = (DataGridView)this.Owner.Controls["tabControlMain"].Controls["tabPageQuestionData"].Controls["dataGridViewQuestions"];
-//            int newIndex = dgv.SelectedRows[0].Index + 1;
             int newIndex = dgv.CurrentRow.Index + 1;
             if (newIndex < dgv.Rows.Count - 1)
             {
                 dgv.CurrentCell = dgv.Rows[newIndex].Cells[0];
-//                QuestionRow = ((DataRowView)dgv.SelectedRows[0].DataBoundItem).Row;
                 QuestionRow = ((DataRowView)dgv.CurrentRow.DataBoundItem).Row;
                 dgv.ClearSelection();
                 dgv.CurrentRow.Selected = true;
@@ -96,12 +94,10 @@ namespace MoodleQuizCreator
             }
 
             DataGridView dgv = (DataGridView)this.Owner.Controls["tabControlMain"].Controls["tabPageQuestionData"].Controls["dataGridViewQuestions"];
-//            int newIndex = dgv.SelectedRows[0].Index - 1;
             int newIndex = dgv.CurrentRow.Index - 1;
             if (newIndex >= 0)
             {
                 dgv.CurrentCell = dgv.Rows[newIndex].Cells[0];
-//                QuestionRow = ((DataRowView)dgv.SelectedRows[0].DataBoundItem).Row;
                 QuestionRow = ((DataRowView)dgv.CurrentRow.DataBoundItem).Row;
                 dgv.ClearSelection();
                 dgv.CurrentRow.Selected = true;
@@ -125,6 +121,10 @@ namespace MoodleQuizCreator
         {
             DataGridView dgv = (DataGridView)this.Owner.Controls["tabControlMain"].Controls["tabPageQuestionData"].Controls["dataGridViewQuestions"];
             dgv.Rows.RemoveAt(dgv.CurrentRow.Index);
+            QuestionRow = ((DataRowView)dgv.CurrentRow.DataBoundItem).Row;
+            dgv.ClearSelection();
+            dgv.CurrentRow.Selected = true;
+            UpdateFormData();
         }
 
         private void UpdateQuestion()
@@ -149,8 +149,11 @@ namespace MoodleQuizCreator
             textBoxQuestionName.TextChanged -= TextBoxQuestionData_TextChanged;
 
             //Set Form controls
-            comboBoxTopic.Text = QuestionRow["Question Topic"].ToString();
-            UpdateCategory();
+            if (comboBoxTopic.Items.Contains(QuestionRow["Question Topic"].ToString()))
+            {
+                comboBoxTopic.Text = QuestionRow["Question Topic"].ToString();
+                UpdateCategory();
+            }
             textBoxQuestionName.Text = QuestionRow["Question Name"].ToString();
             pictureBoxImage.Image = ClassUtils.ByteToImage((byte[])QuestionRow["Question Image"]);
             comboBoxAnswer.Text = QuestionRow["Question Answer"].ToString();
@@ -174,8 +177,8 @@ namespace MoodleQuizCreator
         {
             comboBoxCategory.Items.Clear();
 
-            SubjectTopic selectedTopic = QuestionSubject.Items.First(item => item.name == comboBoxTopic.Text);
-            foreach (SubjectTopicCategory category in selectedTopic.Category)
+            SubjectTopic selectedTopic = QuestionSubject.Items.FirstOrDefault(item => item.name == comboBoxTopic.Text);
+            foreach (SubjectTopicCategory category in selectedTopic!.Category)
             {
                 comboBoxCategory.Items.Add(category.name);
             }
